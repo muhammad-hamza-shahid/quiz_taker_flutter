@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:quiz_taker_flutter/quiz_brain.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 
 QuizBrain quizBrain = new QuizBrain();
 
@@ -30,7 +31,35 @@ class QuizPage extends StatefulWidget {
 class _QuizPageState extends State<QuizPage> {
   List<Icon> scoreKeeper = [];
 
-  int q = 0;
+  void checkAnswer(bool currentAnswer) {
+    setState(() {
+      if (scoreKeeper.length == 13) {
+        Alert(
+          context: context,
+          title: 'Finished!',
+          desc: 'You\'ve reached the end of the quiz.',
+        ).show();
+      } else {
+        if (quizBrain.getAnswer() == currentAnswer) {
+          scoreKeeper.add(
+            Icon(
+              Icons.check,
+              color: Colors.green,
+            ),
+          );
+          quizBrain.nextQuestion();
+        } else {
+          scoreKeeper.add(
+            Icon(
+              Icons.close,
+              color: Colors.red,
+            ),
+          );
+          quizBrain.nextQuestion();
+        }
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +73,7 @@ class _QuizPageState extends State<QuizPage> {
             padding: EdgeInsets.all(10.0),
             child: Center(
               child: Text(
-                quizBrain.questions[q].question,
+                quizBrain.getQuestion(),
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 25.0,
@@ -68,29 +97,7 @@ class _QuizPageState extends State<QuizPage> {
                 ),
               ),
               onPressed: () {
-                if (quizBrain.questions[q].answer == true) {
-                  print('user picked right');
-                  setState(() {
-                    scoreKeeper.add(
-                      Icon(
-                        Icons.check,
-                        color: Colors.green,
-                      ),
-                    );
-                    q++;
-                  });
-                } else {
-                  print('user picked wrong');
-                  setState(() {
-                    scoreKeeper.add(
-                      Icon(
-                        Icons.close,
-                        color: Colors.red,
-                      ),
-                    );
-                    q++;
-                  });
-                }
+                checkAnswer(true);
               },
             ),
           ),
@@ -108,55 +115,15 @@ class _QuizPageState extends State<QuizPage> {
                 ),
               ),
               onPressed: () {
-                //The user picked false.
-                if (quizBrain.questions[q].answer == false) {
-                  print('user picked right');
-                  setState(() {
-                    scoreKeeper.add(
-                      Icon(
-                        Icons.check,
-                        color: Colors.green,
-                      ),
-                    );
-                    q++;
-                  });
-                } else {
-                  print('user picked wrong');
-                  setState(() {
-                    scoreKeeper.add(
-                      Icon(
-                        Icons.close,
-                        color: Colors.red,
-                      ),
-                    );
-                    q++;
-                  });
-                }
-                // setState(() {
-                //   scoreKeeper.add(
-                //     Icon(
-                //       Icons.close,
-                //       color: Colors.red,
-                //     ),
-                //   );
-                //   q++;
-                // });
+                checkAnswer(false);
               },
             ),
           ),
         ),
-        SafeArea(
-          child: Row(
-            children: scoreKeeper,
-          ),
+        Row(
+          children: scoreKeeper,
         )
       ],
     );
   }
 }
-
-/*
-question1: 'You can lead a cow down stairs but not up stairs.', false,
-question2: 'Approximately one quarter of human bones are in the feet.', true,
-question3: 'A slug\'s blood is green.', true,
-*/
