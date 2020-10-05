@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:quiz_taker_flutter/quiz_brain.dart';
+
+QuizBrain quizBrain = new QuizBrain();
 
 void main() => runApp(Quizzler());
 
@@ -27,17 +30,6 @@ class QuizPage extends StatefulWidget {
 class _QuizPageState extends State<QuizPage> {
   List<Icon> scoreKeeper = [];
 
-  List<String> questions = [
-    'Some cats are actually allergic to humans',
-    'You can lead a cow down stairs but not up stairs.',
-    'Approximately one quarter of human bones are in the feet.',
-    'A slug\'s blood is green.',
-    'Buzz Aldrin\'s mother\'s maiden name was \"Moon\".',
-    'It is illegal to pee in the Ocean in Portugal.',
-    'No piece of square dry paper can be folded in half more than 7 times.',
-  ];
-
-  List<bool> answers = [true, false, true, true, true, true, false];
   int q = 0;
 
   @override
@@ -52,7 +44,7 @@ class _QuizPageState extends State<QuizPage> {
             padding: EdgeInsets.all(10.0),
             child: Center(
               child: Text(
-                questions[q],
+                quizBrain.questions[q].question,
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 25.0,
@@ -76,7 +68,7 @@ class _QuizPageState extends State<QuizPage> {
                 ),
               ),
               onPressed: () {
-                if (answers[q] == true) {
+                if (quizBrain.questions[q].answer == true) {
                   print('user picked right');
                   setState(() {
                     scoreKeeper.add(
@@ -99,16 +91,6 @@ class _QuizPageState extends State<QuizPage> {
                     q++;
                   });
                 }
-                // setState(() {
-                //   scoreKeeper.add(
-                //     Icon(
-                //       Icons.check,
-                //       color: Colors.green,
-                //     ),
-                //   );
-                //   q++;
-                // });
-                //The user picked true.
               },
             ),
           ),
@@ -127,7 +109,7 @@ class _QuizPageState extends State<QuizPage> {
               ),
               onPressed: () {
                 //The user picked false.
-                if (answers[q] == false) {
+                if (quizBrain.questions[q].answer == false) {
                   print('user picked right');
                   setState(() {
                     scoreKeeper.add(
