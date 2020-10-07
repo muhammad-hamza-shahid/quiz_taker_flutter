@@ -29,7 +29,12 @@ class QuizPage extends StatefulWidget {
 }
 
 class _QuizPageState extends State<QuizPage> {
-  List<Icon> scoreKeeper = [];
+  List<Icon> scoreKeeper = [
+    Icon(
+      Icons.local_activity,
+      color: Colors.grey.shade900,
+    ),
+  ];
 
   void checkAnswer(bool currentAnswer) {
     setState(() {
@@ -39,6 +44,8 @@ class _QuizPageState extends State<QuizPage> {
           title: 'Finished!',
           desc: 'You\'ve reached the end of the quiz.',
         ).show();
+        scoreKeeper = [];
+        quizBrain.resetCounter();
       } else {
         if (quizBrain.getAnswer() == currentAnswer) {
           scoreKeeper.add(
